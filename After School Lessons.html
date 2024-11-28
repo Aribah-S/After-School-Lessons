@@ -2,8 +2,7 @@
     <head>
         <title>After School Lessons</title> 
         <!-- Load Vue.js from a server (so no local file is needed) -->
-        <script src="https://unpkg.com/vue"></script>
-        <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
+        <script src="https://unpkg.com/vue@2.7.8/dist/vue.js"></script>
         <script src="lessons.js"></script>
         <link rel="stylesheet" href="style.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
@@ -12,63 +11,51 @@
         <!-- The element where Vue wil mount -->
          <div id="app">
             <header>
-                <h1>{{sitename}}</h1>
+                <h1 v-text="sitename"></h1>
                 <button v-on:click='showCheckout'>
-                       <!-- 'cartItemCount' is used the same way as a datay property. -->
+                       <!-- 'cartItemCount' is used the same way as a data property. -->
                         {{ cartItemCount }}
                         <!-- add the cart icon -->
-                         <span class="fas fa-cart-plus"></span> Checkout
+                         <span class="fas fa-cart-plus"></span>
+                          Checkout
                 </button>
             </header>
             <main>
                   <div v-if='showProduct'>
-                    <div v-for="product in products">
+                    <div v-for="product in sortedProducts">
                         <!-- the code for the product page -->
                     <figure>
-                        <!-- bind 'src' attr to 'product.image' in 'data' -->
                          <img v-bind:src="product.image">
                     </figure>
                     <h2 v-text="product.title"></h2>
                     <p v-text="product.description"></p>
-
-                    <!-- The double curly brackets is used instead of 'v-text'-->
                      <p>Price: {{product.price}}</p>
-                      <!-- This buttong will be displayed when 'canAddToCart' is true -->
+                     <p>Available Stock: {{product.availableInventory}}</p>
                      <button v-on:click='addToCart(product)' v-if='canAddToCart(product)'>Add to cart</button>
                      <span v-if='product.availableInventory === cartCount(product.id)'>All out!</span>
-                     <span v-if="product.availableInventory - cartCount(product.id) < 5">Only {{ product.availableInventory - cartCount(product.id) }} left! </span>
+                     <span v-if="product.availableInventory - cartCount(product.id) < 10">Only {{ product.availableInventory - cartCount(product.id) }} left! </span>
                      <span v-else>Buy now!</span>
                      <div> 
                         <span v-for='n in product.rating'>★</span>
                         <span v-for='n in 5 - product.rating'>☆</span>
                      </div>
-
-                     <!-- This button will be displayed otherwise -->
-                     <button disabled='disabled' v-else>
-                        Add to cart
-                     </button>
+                     <button disabled='disabled' v-else>Add to cart</button>
                    </div>
                    <div v-else>
                         <!-- the code for the checkout page -->
                          <h2>Checkout</h2>
+                         <p>Items in cart: {{cartItemCount}}</p>
+                         <p> 
+                             <strong>First Name:</strong>
+                            <input v-model.trim="order.firstName"/> 
+                        </p>
                          <p>
-                            <strong>First Name:</strong>
-                            <!-- This input field is bound to 'firstName' in the 'order' object -->
-                            <input v-model.trim="order.firstName"/>
-                         </p>
-                         <p>
-                            <strong>Last Name:</strong>
-                            <!-- This input field is bound to 'lastName' in the 'order' object -->
+                             <strong>Last Name:</strong>
                             <input v-model.trim="order.lastName"/>
-                         </p>   
-                            <p> 
-                                <strong>Address:</strong> <input v-model="order.address"/>
-                            </p>
-                            <p>
-                                <strong>City:</strong> <input v-model="order.city"/>
-                            </p>
-                            <p>
-                                <strong>State:</strong>
+                        </p>   
+                            <p>  <strong>Address:</strong> <input v-model="order.address"/>  </p>
+                            <p>  <strong>City:</strong> <input v-model="order.city"/>  </p>
+                            <p>  <strong>State:</strong>
                                 <select v-model="order.state">
                                     <option disabled value="">State</option>
                                     <option v-for=" (state, key) in states"
@@ -79,8 +66,7 @@
                                     <option value="Arizona">AR</option>
                                     <option value="California">CA</option>
                                     <option value="Nevada">NV</option>
-                                </select>
-                            </p>
+                                </select> 
                             <p>
                                 <strong>Zip/Postal Code:</strong> <input v-model.number="order.zip" type="number"/>
                             </p>
@@ -109,8 +95,7 @@
         <script type="text/javascript">
                 var webstore = new Vue({ // The Vue instance
                         el: '#app', // The 'option object': DOM mounting point
-                        data: { // the 'data' option
-                                // the key 'sitename' matches the value of 'v-text' earlier
+                        data: {
                                 sitename: 'After School Lessons',
                                 products: lessons,
                                 // products: {
@@ -143,8 +128,7 @@
                                     },
                                 },
                                 
-                             },
-                        methods, {
+                        methods: {
                             addToCart(product) {
                                 this.cart.push(product.id);
                             },
@@ -167,14 +151,11 @@
                                 return count;
                             }
                         },
-                        computed, { // the Computed Property object
-                              cartItemCount: function() { // the property name 
+                        computed: { // the Computed Property object
+                              cartItemCount() { // the property name 
                                        // its value is calculated when its called
                                        return this.cart.length;
                                     },
-                              itemsLeft() {
-                                return this.product.availableInventory - this.cartItemCount;
-                              },
                               sortedProducts() {
 
                                 // the comparison function that defines the order
@@ -187,8 +168,8 @@
                                 // sort the 'products' array and return it
                                 return this.products.sort(compare);
                               }
-                       },
-                );
+                       }
+                });
         </script>
     </body>
 </html>
