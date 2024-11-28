@@ -4,7 +4,7 @@
         <!-- Load Vue.js from a server (so no local file is needed) -->
         <script src="https://unpkg.com/vue"></script>
         <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.js"></script>
-        <script src="products.js"></script>
+        <script src="lessons.js"></script>
         <link rel="stylesheet" href="style.css">
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     </head>
@@ -113,16 +113,17 @@
                         data: { // the 'data' option
                                 // the key 'sitename' matches the value of 'v-text' earlier
                                 sitename: 'After School Lessons',
-                                showProduct: true,
-                                product: {
-                                    id: 1001,
-                                    title: 'Game Development',
-                                    description: 'Learn how to use unreal engine to develop your own video game of any genre!',
-                                    price: 200,
-                                    image: "images/game.webp",
-                                    availableInventory: 10, // was 5
-                                    rating: 3,
+                                products: lessons,
+                                // products: {
+                                //  id: 1001,
+                                //  title: 'Game Development',
+                                //  description: 'Learn how to use unreal engine to develop your own video game of any genre!',
+                                //  price: 200,
+                                //  image: "images/game.webp",
+                                //  availableInventory: 10, // was 5
+                                //  rating: 3,
                                     cart: [], // array to store items in shopping cart
+                                    showProduct: true,
                                     order: {
                                         firstName: '',
                                         lastName: '',
@@ -167,7 +168,7 @@
                                 return this.product.availableInventory - this.cartItemCount;
                               }
                        },
-                });
+                );
         </script>
     </body>
 </html>
