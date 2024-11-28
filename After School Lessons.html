@@ -154,6 +154,9 @@
                             submitForm() {
                                 alert('Order submitted!')
                             },
+                            canAddToCart(product) {
+                                    return this.product.availableInventory > this.cartCount(product.id);
+                                    },
                             cartCount(id) {
                                 let count = 0;
                                 for(let i = 0; i < this.cart.length; i++) {
@@ -169,11 +172,20 @@
                                        // its value is calculated when its called
                                        return this.cart.length;
                                     },
-                              canAddToCart(product) {
-                                    return this.product.availableInventory > this.cartCount(product.id);
-                                    },
                               itemsLeft() {
                                 return this.product.availableInventory - this.cartItemCount;
+                              },
+                              sortedProducts() {
+
+                                // the comparison function that defines the order
+                                function compare(a, b) {
+                                    if (a.price > b.price) return 1;
+                                    if (a.price < b.price) return -1;
+                                    return 0;
+                                }
+
+                                // sort the 'products' array and return it
+                                return this.products.sort(compare);
                               }
                        },
                 );
