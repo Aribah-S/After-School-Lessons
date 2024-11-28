@@ -1,5 +1,5 @@
             /* General Reset */
-            body {
+         body {
                 margin: 0;
                 font-family: Arial, sans-serif;
                 line-height: 1.6;
@@ -8,7 +8,7 @@
             }
 
             /* Header Styling */
-            header {
+           header {
                 background-color: #681b09;
                 color: white;
                 padding: 10px 20px;
@@ -22,7 +22,7 @@
             }
 
             /* Main Content Styling */
-            main {
+        main {
                 max-width: 800px;
                 margin: 20px auto;
                 padding: 20px;
@@ -53,4 +53,4 @@
 
             p:last-child {
                 font-weight: bold;
-            }
+            } 

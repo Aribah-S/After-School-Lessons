@@ -41,6 +41,7 @@
                         <span v-for='n in 5 - product.rating'>☆</span>
                      </div>
                    </div>
+                </div>
                    <div v-else>
                         <!-- the code for the checkout page -->
                          <h2>Checkout</h2>
@@ -64,6 +65,7 @@
                                     <option value="California">CA</option>
                                     <option value="Nevada">NV</option> -->
                                 </select> 
+                            </p>
                             <p>
                                 <strong>Zip/Postal Code:</strong> <input v-model.number="order.zip" type="number"/>
                             </p>
