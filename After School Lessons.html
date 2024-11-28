@@ -34,7 +34,10 @@
                      <button v-on:click="addToCart" v-if="canAddToCart">
                         Add to cart
                      </button>
-                     
+                     <span v-if='itemsLeft  === 0'>All out!</span>
+                     <span v-if="itemsLeft < 5">Only {{itemsLeft}} left! </span>
+                     <span v-else>Buy now!</span>
+
                      <!-- This button will be displayed otherwise -->
                      <button disabled='disabled' v-else>
                         Add to cart
@@ -152,6 +155,9 @@
                                     },
                               canAddToCart: function() {
                                     return this.product.availableInventory > this.cartItemCount;
+                                    },
+                              itemsLeft() {
+                                return this.product.availableInventory - this.cartItemCount;
                               }
                        },
                 });
