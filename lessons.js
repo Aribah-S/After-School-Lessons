@@ -1,4 +1,4 @@
-let lessons = [
+var lessons = [
     {
         "id": 1001,
         "title": "Game Development",
