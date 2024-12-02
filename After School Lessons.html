@@ -30,6 +30,7 @@
                    </figure>
                     <p v-text="product.description"></p>
                      <p>Price: {{product.price}}</p>
+                     <p>Location : {{product.location}}</p>
                      <p>Available Stock: {{product.availableInventory}}</p>
                      <button v-on:click='addToCart(product)' v-if='canAddToCart(product)'>Add to cart</button>
                      <button disabled='disabled' v-else>Add to cart</button>

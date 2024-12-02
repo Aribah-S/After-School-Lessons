@@ -2,6 +2,7 @@ var lessons = [
     {
         "id": 1001,
         "title": "Game Development",
+        "location": "Middlesex University Dubai - Block 19",
         "description": "Learn how to use unreal engine to develop your own video game of any genre!",
         "price": 20.00,
         "image": "images/game.webp",
@@ -11,6 +12,7 @@ var lessons = [
     {
         "id": 1002,
         "title": "Photography",
+        "location": "Middlesex University Dubai - Block 17",
         "description": "Study how to capture some of the most breath taking moments you'll ever witness in all of their glory.",
         "price": 40.00,
         "image": "images/photography.jpg",
@@ -20,6 +22,7 @@ var lessons = [
     {
         "id": 1003,
         "title": "Dance",
+        "location": "University of Wollongong in Dubai",
         "description": "Feel like your body has to flow with the music as well as your mind does? Take up the dance classes. Numerous categories to choose from including hip hop and ballet!",
         "price": 50.50,
         "image": "images/dance.avif",
@@ -29,6 +32,7 @@ var lessons = [
     {
         "id": 1004,
         "title": "Culinary",
+        "location": "International Centre for Culinary Arts Abu Dhabi",
         "description": "Have skills and recipes taught to you by guest celebrity and michelin chefs from around the world!",
         "price": 100.00,
         "image": "images/culinary.webp",
@@ -38,6 +42,7 @@ var lessons = [
     {
         "id": 1005,
         "title": "Film Production",
+        "location": "Middlesex University Dubai - Block 17",
         "description": "Create your own amazing content with the camera work and video editing taught in this class.",
         "price": 80.00,
         "image": "images/film.jpg",
@@ -47,6 +52,7 @@ var lessons = [
     {
         "id": 1006,
         "title": "Martial Arts",
+        "location": "The Warrior Academy Dubai",
         "description": "Learn self defense using karate, judo, taekwondo, and more martial arts which you can choose from",
         "price": 60.50,
         "image": "images/martialarts.jpg",
@@ -56,6 +62,7 @@ var lessons = [
     {
         "id": 1007,
         "title": "DIY & Crafts",
+        "location": "PursueIt - Dubai",
         "description": "Create projects by building, crafting, and creating items to your liking.",
         "price": 35.00,
         "image": "images/diy.webp",
@@ -65,6 +72,7 @@ var lessons = [
     {
         "id": 1008,
         "title": "Yoga",
+        "location": "YogaOne - Abu Dhabi",
         "description": "Achieve Zen by practicing mindfulness and relaxation.",
         "price": 20.00,
         "image": "images/yoga.jpg",
@@ -74,6 +82,7 @@ var lessons = [
     {
         "id": 1009,
         "title": "Music",
+        "location": "Solid Rock - Dubai",
         "description": "Learn how to play different instruments or sing by joining the different clubs created within this extracurricular activity, initiated by the different ideas of students themselves!",
         "price": 40.00,
         "image": "images/music.jpg",
@@ -83,6 +92,7 @@ var lessons = [
     {
         "id": 1010,
         "title": "Cybersecurity",
+        "location": "Middlesex University Dubai - Block 19",
         "description": "Start taking more control of your digital footprint and security by learning how to protect your computer through this cybersecurity course. We have different events every week!",
         "price": 30.00,
         "image": "images/IT.avif",
