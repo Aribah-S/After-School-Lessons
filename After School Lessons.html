@@ -19,6 +19,11 @@
                          <span class="fas fa-cart-plus"></span>
                           Checkout
                 </button>
+                <p>
+                <label for="sortOrder">Sort by:</label>
+                <input type="radio" id="sortOrder" value="sortOrder" v-model="sortOrder.lowToHigh"/>
+                <label>Price: Low to High</label>
+                <input type="radio" id="sortOrder" value="sortOrder" v-model="sortOrder.lowToHigh"/>
             </header>
             <main>
                   <div v-if='showProduct'>
@@ -128,6 +133,9 @@
                                         CA: 'California',
                                         NV: 'Nevada'
                                     },
+                                    sortOrder: {
+                                        lowToHigh: 'ascending', // Default sort order
+                                    }
                                 },
                                 
                         methods: {
@@ -161,12 +169,13 @@
                               sortedProducts() {
 
                                 // the comparison function that defines the order
-                                function compare(a, b) {
-                                    if (a.price > b.price) return 1;
-                                    if (a.price < b.price) return -1;
-                                    return 0;
+                                const compare = (a, b) => {
+                                if (this.sortOrder === 'ascending') {
+                                    return a.price - b.price; // Ascending order
+                                } else {
+                                    return b.price - a.price; // Descending order
                                 }
-
+                            };
                                 // sort the 'products' array and return it
                                 return this.products.sort(compare);
                               }
