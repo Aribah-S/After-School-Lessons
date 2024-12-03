@@ -60,8 +60,10 @@
                              <strong>Last Name:</strong>
                             <input v-model.trim="order.lastName"/>
                         </p>   
+                        <p>  <strong>Phone Number:</strong> <input v-model.number="order.phoneNumber" type="number"/></p>
                             <p>  <strong>Address:</strong> <input v-model="order.address"/>  </p>
                             <p>  <strong>City:</strong> <input v-model="order.city"/>  </p>
+                          
                             <p>  <strong>State:</strong>
                                 <select v-model="order.state">
                                     <option disabled value="">State</option>
@@ -118,6 +120,7 @@
                                     order: {
                                         firstName: '',
                                         lastName: '',
+                                        phoneNumber: '',
                                         address: '',
                                         city: '',
                                         zip: '',
