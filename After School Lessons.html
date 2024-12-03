@@ -12,7 +12,7 @@
          <div id="app">
             <header>
                 <h1 v-text="sitename"></h1>
-                <button v-on:click='showShoppingCart'>
+                <button v-bind:disabled="isCartEmpty" v-on:click='showShoppingCart'>
                        <!-- 'cartItemCount' is used the same way as a data property. -->
                         {{ cartItemCount }}
                         <!-- add the cart icon -->
@@ -74,7 +74,20 @@
                    </div>
                 </div>
                    <div v-else>
-                        <!-- the code for the checkout page -->
+                        <!-- the code for the shopping cart and checkout page -->
+                         <h2>Shopping Cart</h2>
+                         <span v-for="(productId, index) in cart" :key="index">
+                            <div>
+                                <!-- Find the product from products array by id -->
+                                <p> <img :src="getProductById(productId).image" alt="Lesson Image"> </p>
+                                <p>Title: {{ getProductById(productId).title }}</p>
+                                <p>Price: ${{ getProductById(productId).price }}</p>
+                                <p>Location: {{ getProductById(productId).location }}</p>
+                                <button @click="removeFromCart(productId)">Remove</button>
+                            </div>
+                        </span>
+                    </ul>
+                
                          <h2>Checkout</h2>
                          <p>Items in cart: {{cartItemCount}}</p>
                          <p> 
@@ -186,14 +199,27 @@
                                     }
                                 }
                                 return count;
+                            },
+                            getProductById(productId) {
+                                // Find the product in the 'products' array by its id
+                                return this.products.find(product => product.id === productId);
+                            },
+                            removeFromCart(productId) {
+                                const index = this.cart.indexOf(productId);
+                                if (index > -1) {
+                                    this.cart.splice(index, 1);  // Remove the product from the cart
+                                }
                             }
-                        },
+                                                },
                         computed: { // the Computed Property object
-                              cartItemCount() { // the property name 
+                            cartItemCount() { // the property name 
                                        // its value is calculated when its called
-                                       return this.cart.length;
+                                    return this.cart.length;
                                     },
-                              sortedProducts() {
+                            isCartEmpty() {
+                                    return this.cart.length === 0;
+                            },
+                            sortedProducts() {
                                     return this.products.slice().sort((a, b) => {
                                     let valA = a[this.sortAttribute];
                                     let valB = b[this.sortAttribute];
