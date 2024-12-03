@@ -20,10 +20,33 @@
                           Checkout
                 </button>
                 <p>
-                <label for="sortOrder">Sort by:</label>
-                <input type="radio" id="sortOrder" value="sortOrder" v-model="sortOrder.lowToHigh"/>
-                <label>Price: Low to High</label>
-                <input type="radio" id="sortOrder" value="sortOrder" v-model="sortOrder.lowToHigh"/>
+                    <label for="sortAttribute">Sort by:</label>
+                    <div>
+                      <label>
+                        <input type="radio" value="price" v-model="sortAttribute" /> Price
+                      </label>
+                      <label>
+                        <input type="radio" value="location" v-model="sortAttribute" /> Location
+                      </label>
+                      <label>
+                        <input type="radio" value="title" v-model="sortAttribute" /> Name
+                      </label>
+                      <label>
+                        <input type="radio" value="availableInventory" v-model="sortAttribute" /> Available Spaces
+                      </label>
+                      <label>
+                        <input type="radio" value="rating" v-model="sortAttribute" /> Rating
+                      </label>
+                    </div>
+                    <div>
+                      <label>
+                        <input type="radio" value="ascending" v-model="sortOrder" /> Ascending
+                      </label>
+                      <label>
+                        <input type="radio" value="descending" v-model="sortOrder" /> Descending
+                      </label>
+                    </div>
+                  </p>
             </header>
             <main>
                   <div v-if='showProduct'>
@@ -117,6 +140,8 @@
                                 //  rating: 3,
                                     cart: [], // array to store items in shopping cart
                                     showProduct: true,
+                                    sortAttribute: "price",
+                                    sortOrder: "ascending",
                                     order: {
                                         firstName: '',
                                         lastName: '',
@@ -135,9 +160,6 @@
                                         AR: 'Arizona',
                                         CA: 'California',
                                         NV: 'Nevada'
-                                    },
-                                    sortOrder: {
-                                        lowToHigh: 'ascending', // Default sort order
                                     }
                                 },
                                 
@@ -170,20 +192,26 @@
                                        return this.cart.length;
                                     },
                               sortedProducts() {
+                                    return this.products.slice().sort((a, b) => {
+                                    let valA = a[this.sortAttribute];
+                                    let valB = b[this.sortAttribute];
 
-                                // the comparison function that defines the order
-                                const compare = (a, b) => {
-                                if (this.sortOrder === 'ascending') {
-                                    return a.price - b.price; // Ascending order
-                                } else {
-                                    return b.price - a.price; // Descending order
-                                }
-                            };
-                                // sort the 'products' array and return it
-                                return this.products.sort(compare);
-                              }
-                       }
-                });
+                                    // Handle string comparison for non-numeric values
+                                    if (typeof valA === "string" && typeof valB === "string") {
+                                        valA = valA.toLowerCase();
+                                        valB = valB.toLowerCase();
+                                    }
+
+                                    if (this.sortOrder === "ascending") {
+                                        return valA > valB ? 1 : valA < valB ? -1 : 0;
+                                    } else {
+                                        return valA < valB ? 1 : valA > valB ? -1 : 0;
+                                    }
+                                    });
+                                },
+                                },
+                            });
+
         </script>
     </body>
 </html>
