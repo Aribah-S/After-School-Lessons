@@ -59,18 +59,54 @@
                 width: 100%;
                 height: 100vh;
               }
-        
               aside {
-                width: 20%;
-                background-color: #f4f4f4;
+                width: 50%;
+                background-color: #681b09;
                 padding: 20px;
                 box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+                font-size: 16px;
               }
-        
+              
               aside h2 {
                 margin-top: 0;
+                color: #ccb4b4;
+                font-size: 18px;
+                text-transform: uppercase;
+                letter-spacing: 1px;
+                margin-bottom: 15px;
               }
-        
+              
+              aside div {
+                margin-bottom: 20px;
+              }
+              
+              aside label {
+                display: block; /* Make each label on a new line */
+                margin-bottom: 10px;
+                font-size: 14px;
+                color: #aea8a8;
+                cursor: pointer;
+              }
+              
+              aside label input {
+                margin-right: 10px;
+              }
+              
+              aside label:hover {
+                color: #007bff; /* Highlight color when hovered */
+              }
+              
+              aside input[type="radio"] {
+                accent-color: #007bff; /* Customizes the radio button color */
+              }
+              
+              aside input[type="radio"]:checked + label {
+                font-weight: bold;
+              }
+              
+              aside div:last-child {
+                margin-bottom: 0;
+              }
               main {
                 width: 80%;
                 padding: 20px;
