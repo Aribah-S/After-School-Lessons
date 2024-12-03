@@ -12,12 +12,12 @@
          <div id="app">
             <header>
                 <h1 v-text="sitename"></h1>
-                <button v-on:click='showCheckout'>
+                <button v-on:click='showShoppingCart'>
                        <!-- 'cartItemCount' is used the same way as a data property. -->
                         {{ cartItemCount }}
                         <!-- add the cart icon -->
                          <span class="fas fa-cart-plus"></span>
-                          Checkout
+                          Shopping Cart
                 </button>
                 <p>
                     <aside>
@@ -65,7 +65,7 @@
                      <button v-on:click='addToCart(product)' v-if='canAddToCart(product)'>Add to cart</button>
                      <button disabled='disabled' v-else>Add to cart</button>
                      <span v-if='product.availableInventory === cartCount(product.id)'>All out!</span>
-                     <span v-if="product.availableInventory - cartCount(product.id) < 10">Only {{ product.availableInventory - cartCount(product.id) }} left! </span>
+                     <span v-else-if="product.availableInventory - cartCount(product.id) < 10">Only {{ product.availableInventory - cartCount(product.id) }} left! </span>
                      <span v-else>Buy now!</span>
                      <div> 
                         <span v-for='n in product.rating'>★</span>
@@ -169,7 +169,7 @@
                             addToCart(product) {
                                 this.cart.push(product.id);
                             },
-                            showCheckout() {
+                            showShoppingCart() {
                                 this.showProduct = !this.showProduct; 
                             },
                             submitForm() {
