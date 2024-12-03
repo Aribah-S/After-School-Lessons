@@ -19,6 +19,7 @@
                          <span class="fas fa-cart-plus"></span>
                           Shopping Cart
                 </button>
+                <button v-on:click="homePage">Homepage</button>
                 <p>
                     <aside>
                     <label for="sortAttribute">Sort by:</label>
@@ -59,7 +60,7 @@
                         <img v-bind:src="product.image">
                    </figure>
                     <p v-text="product.description"></p>
-                     <p>Price: {{product.price}}</p>
+                     <p>Price: ${{product.price}}</p>
                      <p>Location : {{product.location}}</p>
                      <p>Available Spaces: {{product.availableInventory  -cartCount(product.id)}}</p>
                      <button v-on:click='addToCart(product)' v-if='canAddToCart(product)'>Add to cart</button>
@@ -207,8 +208,12 @@
                                 if (index > -1) {
                                     this.cart.splice(index, 1);  // Remove the product from the cart
                                 }
+                            },
+                            homePage() {
+                                window.location.href = '/After School Lessons.html';
                             }
-                                                },
+
+                    },
                         computed: { // the Computed Property object
                             cartItemCount() { // the property name 
                                        // its value is calculated when its called
