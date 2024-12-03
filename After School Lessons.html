@@ -100,12 +100,11 @@
                         </p>   
                         <p>  <strong>Phone Number:</strong> <input v-model.number="order.phoneNumber" type="number"/></p>
                             <p>  <strong>Address:</strong> <input v-model="order.address"/>  </p>
-                            <p>  <strong>City:</strong> <input v-model="order.city"/>  </p>
                           
-                            <p>  <strong>State:</strong>
-                                <select v-model="order.state">
-                                    <option disabled value="">State</option>
-                                    <option v-for="(state, key) in states" v-bind:value="state">{{ key }}</option>
+                            <p>  <strong>City:</strong>
+                                <select v-model="order.city">
+                                    <option disabled value="">City</option>
+                                    <option v-for="(city, key) in cities" v-bind:value="city">{{ key }}</option>
                                <!--      <option value="Alabama">AL</option>
                                     <option value="Arizona">AR</option>
                                     <option value="California">CA</option>
@@ -128,9 +127,8 @@
                         <p>First Name: {{order.firstName}}</p>
                         <p>Last Name: {{order.lastName}}</p>
                         <p>Address: {{order.address}}</p>
-                        <p>City: {{order.city}}</p>
                         <p>Zip: {{order.zip}}</p>
-                        <p>State: {{order.state}}</p>
+                        <p>City: {{order.city}}</p>
                         <p>Gift: {{order.gift}}</p>
                         <p>Method: {{order.method}}</p>
 
@@ -170,11 +168,11 @@
                                         sendGift: 'Send as a gift',
                                         dontSendGift: 'Do not send as a gift',
                                     },
-                                    states: {
-                                        AL: 'Alabama',
-                                        AR: 'Arizona',
-                                        CA: 'California',
-                                        NV: 'Nevada'
+                                    cities: {
+                                        DXB: 'Dubai',
+                                        AD: 'Abu Dhabi',
+                                        AJ: 'Ajman',
+                                        SJ: 'Sharjah'
                                     }
                                 },
                                 
