@@ -23,7 +23,7 @@
 
             /* Main Content Styling */
              main {
-                max-width: 800px;
+                max-width: 1200px;
                 margin: 20px auto;
                 padding: 20px;
                 background: white;
@@ -63,7 +63,7 @@
                 height: 100vh;
               }
               aside {
-                width: 50%;
+                width: 25%;
                 background-color: #681b09;
                 padding: 20px;
                 box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
@@ -109,12 +109,5 @@
               
               aside div:last-child {
                 margin-bottom: 0;
-              }
-        
-              .product {
-                border: 1px solid #ddd;
-                margin-bottom: 15px;
-                padding: 10px;
-                border-radius: 5px;
               }
         
