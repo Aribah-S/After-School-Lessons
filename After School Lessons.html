@@ -128,7 +128,7 @@
                         <p>Method: {{order.method}}</p>
 
                       
-                    <button v-on:click="submitForm">Place Order</button>
+                    <button v-bind:disabled="!isCheckoutValid" v-on:click="submitForm">Checkout</button>
                    </div>
             </main>
          </div>
@@ -137,15 +137,7 @@
                         el: '#app', // The 'option object': DOM mounting point
                         data: {
                                 sitename: 'After School Lessons',
-                                products: lessons,
-                                // products: {
-                                //  id: 1001,
-                                //  title: 'Game Development',
-                                //  description: 'Learn how to use unreal engine to develop your own video game of any genre!',
-                                //  price: 200,
-                                //  image: "images/game.webp",
-                                //  availableInventory: 10, // was 5
-                                //  rating: 3,
+                                products: [],
                                     cart: [], // array to store items in shopping cart
                                     showProduct: true,
                                     sortAttribute: "price",
@@ -169,6 +161,21 @@
                                         SJ: 'Sharjah'
                                     }
                                 },
+
+                       created() { // this function will be run automatically  
+                                // when creating the Vue instance 
+                            fetch('https://after-school-lessons-back-end.onrender.com/collection/lessons')
+                              .then(response => response.json())
+                              .then( lessonData => { 
+                                  this.products = lessonData; 
+                                  console.log(lessonData)
+                                })
+                                .catch(error => {
+                                console.error('Error fetching lessons:', error);
+                            });
+                            },
+
+                            
                                 
                         methods: {
                             addToCart(product) {
@@ -203,7 +210,7 @@
                                 }
                             },
                             homePage() {
-                                window.location.href = '/After School Lessons.html';
+                                window.location.href = 'After School Lessons.html';
                             }
 
                     },
@@ -214,6 +221,13 @@
                                     },
                             isCartEmpty() {
                                     return this.cart.length === 0;
+                            },
+                            isCheckoutValid(){
+                                    return (
+                                        this.order.firstName.trim() !== "" &&
+                                        this.order.lastName.trim() !== "" &&
+                                        this.order.phoneNumber.toString().trim() !== "" 
+                            )
                             },
                             sortedProducts() {
                                     return this.products.slice().sort((a, b) => {
