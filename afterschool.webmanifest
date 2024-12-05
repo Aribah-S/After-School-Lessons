@@ -1,0 +1,16 @@
+{
+    "name": "After-School-Lessons-Store",
+    "short_name": "ASL-Store",
+    "description" : "store to book spaces for after school lessons or activities",
+    "icons": [
+        {
+            "src": "images/school-icon-512.png",
+            "sizes": "512x512",
+            "type": "image/png"
+        }
+    ],
+
+    "start_url": "index.html",
+    "display": "fullscreen",
+    "background_color": "#B12A34"
+}
