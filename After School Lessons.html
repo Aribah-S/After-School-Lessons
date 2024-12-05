@@ -4,7 +4,6 @@
     <title>After School Lessons</title>
     <!-- Load Vue.js from a server (so no local file is needed) -->
     <script src="https://unpkg.com/vue@2.7.8/dist/vue.js"></script>
-    <script src="lessons.js"></script>
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
 </head>
@@ -180,7 +179,7 @@
                 },
                 cartCount(id) {
                     const cartLesson = this.cart.find(item => item._id === id);
-                    return cartLesson ? cartLesson.quantity : 0;
+                    return cartLesson ? cartLesson.quantity : 0; // ? = if : = else
                 },
                 getProductById(lessonId) {
                     return this.products.find(product => product._id === lessonId);
@@ -263,7 +262,7 @@
                     this.cart.forEach(product => {
                         const originalLesson = this.products.find(item => item._id === product._id);
                         if (!originalLesson) {
-                            console.error(`originalLesson with id ${product._id} not found in fetched products`);
+                            console.error(`originalLesson with id ${product._id} not found in fetched products`); // easier way to define variable names with strings ${}
                             return;
                         }
 
@@ -295,7 +294,7 @@
                     fetch(`https://after-school-lessons-back-end.onrender.com/collection/lessons/search?value=${this.searchKey}`)
                         .then(response => response.json())
                         .then(lessonData => {
-                            this.products = lessonData.filter((item) => item.availableInventory > 0);
+                            this.products = lessonData.filter((item) => item.availableInventory > 0); // > 0 = out of stock (filter out the out of stock items)
                         })
                         .catch(error => {
                             console.error('Error fetching filtered lessons:', error);
@@ -305,7 +304,6 @@
             },
             computed: {
                 cartItemCount() {
-
                     return this.cart.reduce((total, product) => total + product.quantity, 0);
                 },
                 isCartEmpty() {
