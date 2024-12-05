@@ -1,0 +1,346 @@
+<html>
+
+<head>
+    <title>After School Lessons</title>
+    <!-- Load Vue.js from a server (so no local file is needed) -->
+    <script src="https://unpkg.com/vue@2.7.8/dist/vue.js"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+</head>
+
+<body>
+    <!-- The element where Vue wil mount -->
+    <div id="app">
+        <header>
+            <h1 v-text="sitename"></h1>
+            <button v-bind:disabled="isCartEmpty" v-on:click='showShoppingCart'>
+                <!-- 'cartItemCount' is used the same way as a data property. -->
+                {{ cartItemCount }}
+                <!-- add the cart icon -->
+                <span class="fas fa-cart-plus"></span>
+                Shopping Cart
+            </button>
+            <p>
+            <aside>
+                <div>
+                    <input type="text" value="search" v-model="searchKey" placeholder="Search lessons..." />
+                    <button v-on:click="searchResults">Search</button>
+                </div>
+                <label for="sortAttribute">Sort by:</label>
+                <div>
+                    <label><input type="radio" value="price" v-model="sortAttribute" /> Price </label>
+                    <label><input type="radio" value="location" v-model="sortAttribute" /> Location </label>
+                    <label><input type="radio" value="title" v-model="sortAttribute" /> Name </label>
+                    <label><input type="radio" value="availableInventory" v-model="sortAttribute" /> Available Spaces
+                    </label>
+                    <label><input type="radio" value="rating" v-model="sortAttribute" /> Rating </label>
+                </div>
+                <div>
+                    <label>Order:</label>
+                    <label><input type="radio" value="ascending" v-model="sortOrder" /> Ascending </label>
+                    <label><input type="radio" value="descending" v-model="sortOrder" /> Descending </label>
+                </div>
+            </aside>
+            </p>
+        </header>
+        <main>
+            <div v-if='showLesson'>
+                <div v-for="product in sortedProducts">
+                    <!-- the code for the product page -->
+                    <h2 v-text="product.title"></h2>
+                    <figure>
+                        <img v-bind:src="product.image" alt="Lesson Image" v-on:error="imageError">
+                    </figure>
+                    <p v-text="product.description"></p>
+                    <p>Price: ${{product.price}}</p>
+                    <p>Location : {{product.location}}</p>
+                    <p>Available Spaces: {{product.availableInventory - cartCount(product._id)}}</p>
+                    <button v-on:click='addToCart(product)' v-if='canAddToCart(product)'>Add to cart</button>
+                    <button disabled='disabled' v-else>Add to cart</button>
+                    <span v-if='product.availableInventory === cartCount(product._id)'>All out!</span>
+                    <span v-else-if="product.availableInventory - cartCount(product._id) < 10">Only {{
+                        product.availableInventory - cartCount(product._id) }} left! </span>
+                    <span v-else>Buy now!</span>
+                    <div>
+                        <span v-for='n in product.rating'>★</span>
+                        <span v-for='n in 5 - product.rating'>☆</span>
+                    </div>
+                </div>
+            </div>
+            <div v-else>
+                <!-- the code for the shopping cart and checkout page -->
+                <button v-on:click="homePage">Homepage</button>
+                <h2>Shopping Cart</h2>
+                <span v-for="(product, index) in cart" :key="index">
+                    <div>
+                        <!-- Find the product from products array by id -->
+                        <p> <img :src="getProductById(product._id)?.image" alt="Lesson Image" v-on:error="imageError"> </p>
+                        <p>Title: {{ getProductById(product._id).title }}</p>
+                        <p>Price: ${{ getProductById(product._id).price }}</p>
+                        <p>Location: {{ getProductById(product._id).location }}</p>
+                        <p>Quantity: {{ product.quantity }}</p>
+                        <button v-on:click="removeFromCart(product._id)">Remove</button>
+                    </div>
+                </span>
+
+                <h2>Checkout</h2>
+                <p>Items in cart: {{cartItemCount}}</p>
+                <p> <strong>First Name:</strong><input v-model.trim="order.firstName"
+                        v-on:input="validateName('firstName')" required /> <small>Letters only.</small> </p>
+                <p><strong>Last Name:</strong><input v-model.trim="order.lastName" v-on:input="validateName('lastName')"
+                        required /> <small>Letters only.</small> </p>
+                <p><strong>Phone Number:</strong><input v-model="order.phoneNumber"
+                        @input="validatePhoneNumber('phoneNumber')" /> <small>Numbers only.</small> </p>
+                <p><strong>Address:</strong> <input v-model="order.address" /></p>
+                <p><strong>City:</strong><select v-model="order.city">
+                        <option disabled value="">City</option>
+                        <option v-for="(city, key) in cities" v-bind:value="city">{{ key }}</option>
+                    </select></p>
+                <p><strong>Zip/Postal Code:</strong> <input v-model="order.zip" @input="validateZIP('zip')" /></p>
+                <p><input type="checkbox" id="gift" value="true" v-model="order.gift" v-bind:true-value="order.sendGift"
+                        v-bind:false-value="order.dontSendGift" />
+                    <label for="gift">Ship as a gift?</label>
+                </p>
+                <p><input type="radio" id="home" value="Home" v-model="order.method" /><label for="home">Home</label>
+                    <input type="radio" id="business" value="Business" v-model="order.method" /><label
+                        for="business">Business</label>
+                </p>
+                <h2>Order Information</h2>
+                <p>First Name: {{order.firstName}}</p>
+                <p>Last Name: {{order.lastName}}</p>
+                <p>Address: {{order.address}}</p>
+                <p>Zip: {{order.zip}}</p>
+                <p>City: {{order.city}}</p>
+                <p>Gift: {{order.gift}}</p>
+                <p>Method: {{order.method}}</p>
+                <button v-bind:disabled="!isCheckoutValid" v-on:click="submitOrder">Checkout</button>
+            </div>
+        </main>
+    </div>
+    <script type="text/javascript">
+        var webstore = new Vue({
+            el: '#app',
+            data: {
+                sitename: 'After School Lessons',
+                products: [],
+                cart: [],
+                showLesson: true,
+                sortAttribute: "price",
+                sortOrder: "ascending",
+                order: {
+                    firstName: '',
+                    lastName: '',
+                    phoneNumber: '',
+                    address: '',
+                    city: '',
+                    zip: '',
+                    method: '',
+                    gift: '',
+                    sendGift: 'Send as a gift',
+                    dontSendGift: 'Do not send as a gift',
+                },
+                cities: {
+                    DXB: 'Dubai',
+                    AD: 'Abu Dhabi',
+                    AJ: 'Ajman',
+                    SJ: 'Sharjah'
+                },
+                searchKey: '',
+            },
+
+            created() {
+                fetch('https://after-school-lessons-back-end.onrender.com/collection/lessons')
+                    .then(response => response.json())
+                    .then(lessonData => {
+                        this.products = lessonData.filter((item) => item.availableInventory > 0);
+                    })
+                    .catch(error => {
+                        console.error('Error fetching lessons:', error);
+                    });
+            },
+
+            methods: {
+                addToCart(lesson) {
+                    const existingLessonInCart = this.cart.find(item => item._id === lesson._id);
+                    if (existingLessonInCart) {
+                        existingLessonInCart.quantity += 1;
+                    } else {
+                        this.cart.push({ ...lesson, quantity: 1 });
+                    }
+                },
+                showShoppingCart() {
+                    this.showLesson = !this.showLesson;
+                },
+                submitForm() {
+                    alert('Order submitted!')
+                },
+                canAddToCart(lesson) {
+                    return lesson.availableInventory > this.cartCount(lesson._id);
+                },
+                cartCount(id) {
+                    const cartLesson = this.cart.find(item => item._id === id);
+                    return cartLesson ? cartLesson.quantity : 0; // ? = if : = else
+                },
+                getProductById(lessonId) {
+                    return this.products.find(product => product._id === lessonId);
+                },
+                removeFromCart(lessonId) {
+                    const cartItem = this.cart.find(item => item._id === lessonId);
+                    if (cartItem) {
+                        if (cartItem.quantity > 1) {
+                            cartItem.quantity -= 1;
+                        } else {
+                            const index = this.cart.findIndex(item => item._id === lessonId);
+                            if (index > -1) {
+                                this.cart.splice(index, 1);
+                            }
+                        }
+                    }
+                },
+                homePage() {
+                    window.location.href = 'index.html';
+                },
+                validateName(field) {
+                    this.order[field] = this.order[field].replace(/[^a-zA-Z]/g, "");
+                },
+
+                validatePhoneNumber(field) {
+                    this.order[field] = this.order[field].replace(/[^0-9+() -]/g, "");
+                },
+                validateZIP(field) {
+                    this.order[field] = this.order[field].replace(/[^0-9]/g, "");
+                },
+                imageError() {
+                    alert('Image not found!');
+                },
+
+                submitOrder() {
+                    const newOrder = {
+                        firstName: this.order.firstName,
+                        lastName: this.order.lastName,
+                        phoneNumber: this.order.phoneNumber,
+                        address: this.order.address,
+                        city: this.order.city,
+                        zipCode: this.order.zip,
+                        isGiftSelected: this.order.gift,
+                        deliveryLocation: this.order.method,
+                        lessons: this.cart.map(product => ({
+                            lessonId: product._id,
+                            spaces: product.quantity
+                        })),
+                    };
+
+                    // POST request
+                    fetch('https://after-school-lessons-back-end.onrender.com/collection/orders/addOne', {
+                        mode: 'cors',
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(newOrder)
+                    })
+                        .then(response => {
+                            if (!response.ok) {
+                                throw new Error('Error submitting order');
+                            }
+                            return response.json();
+                        })
+                        .then(data => {
+                            console.log('Order saved successfully:', data);
+                            alert('Order submitted successfully!');
+                            this.updateLessonSpaces();
+                            this.cart = [];
+
+                        })
+                        .catch(error => {
+                            console.error('Error saving order:', error);
+                            alert('An error occurred while submitting your order. Please try again.');
+                        });
+                },
+
+                updateLessonSpaces() {
+                    this.cart.forEach(product => {
+                        const originalLesson = this.products.find(item => item._id === product._id);
+                        if (!originalLesson) {
+                            console.error(`originalLesson with id ${product._id} not found in fetched products`); // easier way to define variable names with strings ${}
+                            return;
+                        }
+
+                        const updatedLessonSpaces = originalLesson.availableInventory - product.quantity;
+
+                        fetch(`https://after-school-lessons-back-end.onrender.com/collection/lessons/update/${product._id}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ availableInventory: updatedLessonSpaces }),
+                        })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error(`Failed to update lesson with id ${product._id}`);
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                console.log(`Lesson ${product._id} updated successfully: ${data}`);
+                            })
+                            .catch(error => {
+                                console.error(`Error updating lesson ${product._id}:, error`);
+                            });
+                    });
+                },
+
+                searchResults() {
+                    fetch(`https://after-school-lessons-back-end.onrender.com/collection/lessons/search?value=${this.searchKey}`)
+                        .then(response => response.json())
+                        .then(lessonData => {
+                            this.products = lessonData.filter((item) => item.availableInventory > 0); // > 0 = out of stock (filter out the out of stock items)
+                        })
+                        .catch(error => {
+                            console.error('Error fetching filtered lessons:', error);
+                        });
+
+                }
+            },
+            computed: {
+                cartItemCount() {
+                    return this.cart.reduce((total, product) => total + product.quantity, 0);
+                },
+                isCartEmpty() {
+                    return this.cart.length === 0;
+                },
+                isCheckoutValid() {
+
+                    return this.order.firstName && this.order.lastName && this.order.phoneNumber && this.order.address && this.order.zip && this.order.city;
+                },
+                sortedProducts() {
+                    return this.products.slice().sort((a, b) => {
+                        let valA = a[this.sortAttribute];
+                        let valB = b[this.sortAttribute];
+                        if (typeof valA === "string" && typeof valB === "string") {
+                            valA = valA.toLowerCase();
+                            valB = valB.toLowerCase();
+                        }
+
+                        if (this.sortOrder === "ascending") {
+                            return valA > valB ? 1 : valA < valB ? -1 : 0;
+                        } else {
+                            return valA < valB ? 1 : valA > valB ? -1 : 0;
+                        }
+                    });
+                },
+            },
+
+            // watch: {
+            //     searchQuery: function (newQuery) {
+            //         this.searchResults(newQuery);
+            //       }
+            //   },
+        });
+
+
+    </script>
+     
+</body>
+
+</html>
