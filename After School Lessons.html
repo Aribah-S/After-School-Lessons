@@ -21,7 +21,10 @@
                 </button>
                 <p>
                     <aside>
-                  
+                        <div>
+                     <input type="text" value="search" v-model="searchKey" placeholder="Search lessons..." />
+                     <button v-on:click="searchResults">Search</button>
+                        </div>
                     <label for="sortAttribute">Sort by:</label>
                     <div>
                       <label><input type="radio" value="price" v-model="sortAttribute" /> Price </label>
@@ -132,7 +135,8 @@
                                     AD: 'Abu Dhabi',
                                     AJ: 'Ajman',
                                     SJ: 'Sharjah'
-                                }
+                                },
+                                searchKey: '',
                             },
 
                        created() { 
@@ -223,7 +227,9 @@
                                 console.log('Order saved successfully:', data);
                                 alert('Order submitted successfully!');
                                 this.updateLessonSpaces();
-                                this.cart = [];                       
+                                this.cart = [];        
+                                
+                                window.location.href = 'After School Lessons.html';
                             })
                             .catch(error => {
                                 console.error('Error saving order:', error);
@@ -263,8 +269,18 @@
                            });
                         },
 
+                        searchResults() {
+                        fetch(`https://after-school-lessons-back-end.onrender.com/collection/lessons/search?value=${this.searchKey}`)
+                                .then(response => response.json())
+                                .then( lessonData => { 
+                                    this.products = lessonData.filter((item) => item.availableInventory > 0);
+                                })
+                                .catch(error => {
+                                    console.error('Error fetching filtered lessons:', error);
+                            });
 
-                    },
+                        }   
+                },
                         computed: { 
                             cartItemCount() { 
                                        
@@ -274,7 +290,9 @@
                                     return this.cart.length === 0;
                             },
                             isCheckoutValid(){
-                                    return this.order.firstName && this.order.lastName && this.order.phoneNumber && this.order.address && this.order.zip && this.order.city;
+                                const nameRegex = /^[A-Za-z]+$/;
+
+                                    return  nameRegex.test(this.order.firstName) &&  nameRegex.test(this.order.lastName) && this.order.phoneNumber && this.order.address && this.order.zip && this.order.city;
                             },
                             sortedProducts() {
                                   return this.products.slice().sort((a, b) => {
@@ -293,7 +311,14 @@
                                     });
                                 },
                                 },
-                            });
+
+                       // watch: {
+                       //     searchQuery: function (newQuery) {
+                       //         this.searchResults(newQuery);
+                       //       }
+                       //   },
+                       });
+
 
         </script>
     </body>
