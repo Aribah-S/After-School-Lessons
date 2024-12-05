@@ -128,7 +128,7 @@
                         <p>Method: {{order.method}}</p>
 
                       
-                    <button v-bind:disabled="!isCheckoutValid" v-on:click="submitForm">Checkout</button>
+                    <button v-bind:disabled="!isCheckoutValid" v-on:click="submitOrder">Checkout</button>
                    </div>
             </main>
          </div>
@@ -172,7 +172,7 @@
                                 })
                                 .catch(error => {
                                 console.error('Error fetching lessons:', error);
-                            });
+                            })                            
                             },
 
                             
@@ -211,7 +211,54 @@
                             },
                             homePage() {
                                 window.location.href = 'After School Lessons.html';
-                            }
+                            },
+// entirely the new POST request --------------------------------------
+                            submitOrder() {
+                            const newOrder = {
+                                id: Date.now(), 
+                                firstName: this.order.firstName,
+                                lastName: this.order.lastName,
+                                phoneNumber: this.order.phoneNumber,
+                                address: this.order.address,
+                                city: this.order.city,
+                                zipCode: this.order.zip,
+                                isGiftSelected: this.order.gift,
+                                deliveryLocation: this.order.method,
+                                lessons: this.cart.map(productId => {
+                                    const product = this.getProductById(productId);
+                                    return {
+                                        lessonId: product.id,
+                                        spaces: 1 
+                                    };
+                                }),
+                                numberOfSpaces: this.cart.length 
+                            };
+
+                            // POST request
+                            fetch('https://after-school-lessons-back-end.onrender.com/collection/orders/addOne', {
+                                mode: 'cors',
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json'
+                                },
+                                body: JSON.stringify(newOrder)
+                            })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error(`HTTP error! status: ${response.status}`);
+                                }
+                                return response.json();
+                            })
+                            .then(data => {
+                                console.log('Order saved successfully:', data);
+                                alert('Order submitted successfully!');
+                              
+                            })
+                            .catch(error => {
+                                console.error('Error saving order:', error);
+                                alert('An error occurred while submitting your order. Please try again.');
+                            });
+                        },
 
                     },
                         computed: { // the Computed Property object
