@@ -19,7 +19,6 @@
                          <span class="fas fa-cart-plus"></span>
                           Shopping Cart
                 </button>
-                <button v-on:click="homePage">Homepage</button>
                 <p>
                     <aside>
                   
@@ -64,6 +63,7 @@
                 </div>
                    <div v-else>
                         <!-- the code for the shopping cart and checkout page -->
+                        <button v-on:click="homePage">Homepage</button>
                          <h2>Shopping Cart</h2>
                          <span v-for="(product, index) in cart" :key="index">
                             <div>
@@ -73,7 +73,7 @@
                                 <p>Price: ${{ getProductById(product._id).price }}</p>
                                 <p>Location: {{ getProductById(product._id).location }}</p>
                                 <p>Quantity: {{ product.quantity }}</p>
-                                <button @click="removeFromCart(product._id)">Remove</button>
+                                <button v-on:click="removeFromCart(product._id)">Remove</button>
                             </div>
                         </span>
                 
@@ -106,12 +106,12 @@
             </main>
          </div>
         <script type="text/javascript">
-                var webstore = new Vue({ // The Vue instance
-                        el: '#app', // The 'option object': DOM mounting point
+                var webstore = new Vue({ 
+                        el: '#app', 
                         data: {
                                 sitename: 'After School Lessons',
                                 products: [],
-                                cart: [], // array to store items in shopping cart
+                                cart: [], 
                                 showLesson: true,
                                 sortAttribute: "price",
                                  sortOrder: "ascending",
@@ -172,15 +172,22 @@
                                 return this.products.find(product => product._id === lessonId);
                             },
                             removeFromCart(lessonId) {
-                                const index = this.cart.indexOf(lessonId);
-                                if (index > -1) {
-                                    this.cart.splice(index, 1);  
+                                const cartItem = this.cart.find(item => item._id === lessonId); 
+                                if (cartItem) {
+                                    if (cartItem.quantity > 1) {
+                                        cartItem.quantity -= 1; 
+                                    } else {
+                                        const index = this.cart.findIndex(item => item._id === lessonId); 
+                                        if (index > -1) {
+                                            this.cart.splice(index, 1); 
+                                        }
+                                    }
                                 }
                             },
                             homePage() {
                                 window.location.href = 'After School Lessons.html';
                             },
-// entirely the new POST request --------------------------------------
+
                             submitOrder() {
                             const newOrder = {
                                 firstName: this.order.firstName,
@@ -245,7 +252,7 @@
                                     if (!response.ok) {
                                         throw new Error(`Failed to update lesson with id ${product._id}`);
                                     }
-                                    return response.json(); // Parse the JSON only if the response is ok
+                                    return response.json(); 
                                 })
                                        .then(data => {
                                    console.log(`Lesson ${product._id} updated successfully: ${data}`);
@@ -258,9 +265,9 @@
 
 
                     },
-                        computed: { // the Computed Property object
-                            cartItemCount() { // the property name 
-                                       // its value is calculated when its called
+                        computed: { 
+                            cartItemCount() { 
+                                       
                                     return this.cart.reduce((total, product) => total + product.quantity, 0);
                             },
                             isCartEmpty() {
