@@ -20,7 +20,7 @@
     <div id="app">
         <header>
             <h1 v-text="sitename"></h1>
-            <button v-bind:disabled="isCartEmpty" v-on:click='showShoppingCart'>
+            <button v-bind:disabled="isCartEmpty" v-on:click='showShoppingCart' class="button">
                 <!-- 'cartItemCount' is used the same way as a data property. -->
                 {{ cartItemCount }}
                 <!-- add the cart icon -->
@@ -28,26 +28,23 @@
                 Shopping Cart
             </button>
             <p>
-            <aside>
-                <div>
+                <div class="search">
                     <input type="text" value="search" v-model="searchKey" placeholder="Search lessons..." />
-                    <button v-on:click="searchResults">Search</button>
+                    <button v-on:click="searchResults" class="button-2">Search</button>
                 </div>
-                <label for="sortAttribute">Sort by:</label>
+                <label class="label" for="sortAttribute">Sort by:</label>
                 <div>
-                    <label><input type="radio" value="price" v-model="sortAttribute" /> Price </label>
-                    <label><input type="radio" value="location" v-model="sortAttribute" /> Location </label>
-                    <label><input type="radio" value="title" v-model="sortAttribute" /> Name </label>
-                    <label><input type="radio" value="availableInventory" v-model="sortAttribute" /> Available Spaces
-                    </label>
-                    <label><input type="radio" value="rating" v-model="sortAttribute" /> Rating </label>
+                    <label class="radio"><input type="radio" value="price" v-model="sortAttribute" /> Price </label>
+                    <label class="radio"><input type="radio" value="location" v-model="sortAttribute" /> Location </label>
+                    <label class="radio"><input type="radio" value="title" v-model="sortAttribute" /> Name </label>
+                    <label class="radio"><input type="radio" value="availableInventory" v-model="sortAttribute" /> Available Spaces</label>
+                    <label class="radio"><input type="radio" value="rating" v-model="sortAttribute" /> Rating </label>
                 </div>
                 <div>
-                    <label>Order:</label>
-                    <label><input type="radio" value="ascending" v-model="sortOrder" /> Ascending </label>
-                    <label><input type="radio" value="descending" v-model="sortOrder" /> Descending </label>
+                    <label class="label">Order:</label>
+                    <label class="radio"><input type="radio" value="ascending" v-model="sortOrder" /> Ascending </label>
+                    <label class="radio"><input type="radio" value="descending" v-model="sortOrder" /> Descending </label>
                 </div>
-            </aside>
             </p>
         </header>
         <main>
@@ -89,10 +86,10 @@
                         <button v-on:click="removeFromCart(product._id)">Remove</button>
                     </div>
                 </span>
-
+                <div class="checkoutform">
                 <h2>Checkout</h2>
                 <p>Items in cart: {{cartItemCount}}</p>
-                <p> <strong>First Name:</strong><input v-model.trim="order.firstName"
+                <p><strong>First Name:</strong><input v-model.trim="order.firstName"
                         v-on:input="validateName('firstName')" required /> <small>Letters only.</small> </p>
                 <p><strong>Last Name:</strong><input v-model.trim="order.lastName" v-on:input="validateName('lastName')"
                         required /> <small>Letters only.</small> </p>
@@ -112,6 +109,7 @@
                     <input type="radio" id="business" value="Business" v-model="order.method" /><label
                         for="business">Business</label>
                 </p>
+                </div>
                 <h2>Order Information</h2>
                 <p>First Name: {{order.firstName}}</p>
                 <p>Last Name: {{order.lastName}}</p>
@@ -122,8 +120,9 @@
                 <p>Method: {{order.method}}</p>
                 <button v-bind:disabled="!isCheckoutValid" v-on:click="submitOrder">Checkout</button>
             </div>
-        </main>
-    </div>
+     </main>
+</div>
+
     <script type="text/javascript">
         var webstore = new Vue({
             el: '#app',
